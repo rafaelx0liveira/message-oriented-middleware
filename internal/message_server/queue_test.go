@@ -1,42 +1,119 @@
 package message_server
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestCreateQueue_ShouldCreateQueue(t *testing.T) {
+	assert := assert.New(t)
+
 	queue := NewSliceQueue()
 
-	if queue == nil {
-		t.Error("Queue should not be nil")
-	}
+	assert.NotNil(queue)
 }
 
-func TestQueue_ShouldEnqueueAndDequeue(t *testing.T) {
-	queue := NewSliceQueue()
+func TestEnqueue_ShouldEnqueueMessage(t *testing.T) {
+	assert := assert.New(t)
 
-	msg := NewMessage(1, "Hello Go")
+	queue := &SliceQueue{}
+	queue.Enqueue(NewMessage(1, "First message"))
 
-	queue.Enqueue(*msg)
+	assert.Equal(1, (*queue)[0].ID)
+	assert.Equal("First message", (*queue)[0].Content)
+	assert.Equal(2, len(*queue))
 
-	if queue.Len() != 1 {
-		t.Errorf("Expected queue length = 1")
+	queue.Enqueue(NewMessage(2, "Second message"))
+
+	assert.Equal(2, (*queue)[1].ID)
+	assert.Equal("Second message", (*queue)[1].Content)
+	assert.Equal(2, len(*queue))
+}
+
+func TestDequeue_ShouldDequeueMessage(t *testing.T) {
+	assert := assert.New(t)
+
+	queue := &SliceQueue{}
+
+	queue.Enqueue(NewMessage(1, "Hello Go"))
+	dequeuedMessage, err := queue.Dequeue()
+
+	assert.Nil(err)
+	assert.NotNil(dequeuedMessage)
+
+	assert.Equal(1, dequeuedMessage.ID, "they should be equal")
+	assert.Equal("Hello Go", dequeuedMessage.Content, "they should be equal")
+}
+
+func TestGetQueueLength_ShouldReturnLength(t *testing.T) {
+	assert := assert.New(t)
+
+	//queue -> []*Message
+	queue := &SliceQueue{}
+
+	assert.Equal(0, queue.Len())
+
+	queue.Enqueue(NewMessage(1, "Message 1"))
+	queue.Enqueue(NewMessage(2, "Message 2"))
+	queue.Enqueue(NewMessage(3, "Message 3"))
+
+	assert.Equal(3, queue.Len())
+
+	queue.Dequeue()
+
+	assert.Equal(2, queue.Len())
+}
+
+func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
+	type args struct {
+		queue       *SliceQueue
+		enqueueMsgs []Message
+		dequeueMsgs int
 	}
 
-	popMsg, err := queue.Dequeue()
-
-	if err != nil {
-		t.Fatalf("Error dequeuing message: %v", err)
+	tests := []struct {
+		name      string
+		arguments args
+		want      int
+	}{
+		{"Test len 0", args{queue: &SliceQueue{}, enqueueMsgs: []Message{}, dequeueMsgs: 0}, 0},
+		{"Test len 0 - Only Dequeue", args{queue: &SliceQueue{}, enqueueMsgs: []Message{}, dequeueMsgs: 1}, 0},
+		{"Test len 3 - Only Enqueue", 
+		args{
+			queue: &SliceQueue{},
+			enqueueMsgs: []Message{
+				{ID: 1, Content: "Mesg 1"},
+				{ID: 2, Content: "Mesg 2"},
+				{ID: 3, Content: "Mesg 3"},
+			},
+			dequeueMsgs: 0,
+		}, 3},
+		{"Te len 2 - Enqueue and Dequeue", args{queue: &SliceQueue{},
+			enqueueMsgs: []Message{
+				{ID: 1, Content: "Mesg 1"},
+				{ID: 2, Content: "Mesg 2"},
+				{ID: 3, Content: "Mesg 3"}},
+			dequeueMsgs: 1,
+		}, 2},
 	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			queue := tt.arguments.queue
 
-	if popMsg.ID != 1 {
-		t.Errorf("Expected message ID 1, got %d", popMsg.ID)
+
+			for _, enqMsgs := range tt.arguments.enqueueMsgs {
+				queue.Enqueue(&enqMsgs)
+			}
+
+			for i := 0; i < tt.arguments.dequeueMsgs; i++ {
+				queue.Dequeue()				
+			}
+
+			got := queue.Len()
+			if got != tt.want {
+				t.Errorf("Len() got = %v, want %v", got, tt.want)
+			}
+		})
 	}
-
-	if popMsg.Content != "Hello Go" {
-		t.Errorf("Expected message content 'Hello Go', got '%s'", popMsg.Content)
-	}
-
-	if queue.Len() != 0 {
-		t.Errorf("Expected queue length = 0")
-	}
-
 }

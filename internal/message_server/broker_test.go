@@ -1,23 +1,28 @@
 package message_server
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 func TestCreateBroker_ShouldCreateBroker(t *testing.T) {
+	assert := assert.New(t)
+
 	broker := NewBroker()
 
-	if broker == nil {
-		t.Error("Broker should not be nil")
+	if assert.NotNil(broker) {
+		assert.Equal(0, len(broker.Queues))
 	}
 }
 
 func TestAppendQueueToBroker_ShouldAppendQueue(t *testing.T) {
+	assert := assert.New(t)
+
 	queue := NewSliceQueue()
 	broker := NewBroker()
 
 	broker.AppendQueue(queue)
 	len := len(broker.Queues)
 
-	if len != 1 {
-		t.Error("Broker should have one queue")
-	}
+	assert.Equal(1, len, "Broker should have one queue")
 }
