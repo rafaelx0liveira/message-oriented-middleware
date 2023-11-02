@@ -12,11 +12,11 @@ func NewBroker() *Broker {
 }
 
 func (b *Broker) SendMessage(message *Message) error {
-	return b.Queues[0].Enqueue(message)
+	return b.Queues[0].enqueue(message)
 }
 
 func (b *Broker) ReceiveMessage() (*Message, error) {
-	return b.Queues[0].Dequeue()
+	return b.Queues[0].dequeue()
 }
 
 // Private:
