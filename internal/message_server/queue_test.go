@@ -18,13 +18,13 @@ func TestEnqueue_ShouldEnqueueMessage(t *testing.T) {
 	assert := assert.New(t)
 
 	queue := &SliceQueue{}
-	queue.Enqueue(NewMessage(1, "First message"))
+	queue.enqueue(NewMessage(1, "First message"))
 
 	assert.Equal(1, (*queue)[0].ID)
 	assert.Equal("First message", (*queue)[0].Content)
-	assert.Equal(2, len(*queue))
+	assert.Equal(1, len(*queue))
 
-	queue.Enqueue(NewMessage(2, "Second message"))
+	queue.enqueue(NewMessage(2, "Second message"))
 
 	assert.Equal(2, (*queue)[1].ID)
 	assert.Equal("Second message", (*queue)[1].Content)
@@ -36,8 +36,8 @@ func TestDequeue_ShouldDequeueMessage(t *testing.T) {
 
 	queue := &SliceQueue{}
 
-	queue.Enqueue(NewMessage(1, "Hello Go"))
-	dequeuedMessage, err := queue.Dequeue()
+	queue.enqueue(NewMessage(1, "Hello Go"))
+	dequeuedMessage, err := queue.dequeue()
 
 	assert.Nil(err)
 	assert.NotNil(dequeuedMessage)
@@ -52,17 +52,17 @@ func TestGetQueueLength_ShouldReturnLength(t *testing.T) {
 	//queue -> []*Message
 	queue := &SliceQueue{}
 
-	assert.Equal(0, queue.Len())
+	assert.Equal(0, queue.len())
 
-	queue.Enqueue(NewMessage(1, "Message 1"))
-	queue.Enqueue(NewMessage(2, "Message 2"))
-	queue.Enqueue(NewMessage(3, "Message 3"))
+	queue.enqueue(NewMessage(1, "Message 1"))
+	queue.enqueue(NewMessage(2, "Message 2"))
+	queue.enqueue(NewMessage(3, "Message 3"))
 
-	assert.Equal(3, queue.Len())
+	assert.Equal(3, queue.len())
 
-	queue.Dequeue()
+	queue.dequeue()
 
-	assert.Equal(2, queue.Len())
+	assert.Equal(2, queue.len())
 }
 
 func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
@@ -79,16 +79,16 @@ func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
 	}{
 		{"Test len 0", args{queue: &SliceQueue{}, enqueueMsgs: []Message{}, dequeueMsgs: 0}, 0},
 		{"Test len 0 - Only Dequeue", args{queue: &SliceQueue{}, enqueueMsgs: []Message{}, dequeueMsgs: 1}, 0},
-		{"Test len 3 - Only Enqueue", 
-		args{
-			queue: &SliceQueue{},
-			enqueueMsgs: []Message{
-				{ID: 1, Content: "Mesg 1"},
-				{ID: 2, Content: "Mesg 2"},
-				{ID: 3, Content: "Mesg 3"},
-			},
-			dequeueMsgs: 0,
-		}, 3},
+		{"Test len 3 - Only Enqueue",
+			args{
+				queue: &SliceQueue{},
+				enqueueMsgs: []Message{
+					{ID: 1, Content: "Mesg 1"},
+					{ID: 2, Content: "Mesg 2"},
+					{ID: 3, Content: "Mesg 3"},
+				},
+				dequeueMsgs: 0,
+			}, 3},
 		{"Te len 2 - Enqueue and Dequeue", args{queue: &SliceQueue{},
 			enqueueMsgs: []Message{
 				{ID: 1, Content: "Mesg 1"},
@@ -101,16 +101,15 @@ func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			queue := tt.arguments.queue
 
-
 			for _, enqMsgs := range tt.arguments.enqueueMsgs {
-				queue.Enqueue(&enqMsgs)
+				queue.enqueue(&enqMsgs)
 			}
 
 			for i := 0; i < tt.arguments.dequeueMsgs; i++ {
-				queue.Dequeue()				
+				queue.dequeue()
 			}
 
-			got := queue.Len()
+			got := queue.len()
 			if got != tt.want {
 				t.Errorf("Len() got = %v, want %v", got, tt.want)
 			}
