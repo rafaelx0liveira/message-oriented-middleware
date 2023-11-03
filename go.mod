@@ -1,4 +1,4 @@
-module message_server
+module github.com/rafaelx0liveira/message-oriented-middleware
 
 go 1.21.3
 

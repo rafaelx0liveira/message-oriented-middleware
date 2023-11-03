@@ -22,15 +22,12 @@ jobs:
 
       - name: Build Producer
         run: go build -v ./cmd/producer_app
-        working-directory: ./cmd/producer_app
 
       - name: Build Consumer
         run: go build -v ./cmd/consumer_app
-        working-directory: ./cmd/consumer_app
 
       - name: Build Message Server
         run: go build -v ./cmd/message_server_app
-        working-directory: ./cmd/message_server_app
 
       - name: Test
         run: go test -v ./...
