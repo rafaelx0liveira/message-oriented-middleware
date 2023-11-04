@@ -1,22 +1,11 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/router"
 )
 
 func main() {
-	// const for the port number
-	const portNumber = ":8080"
-
-	// Initialize the router 
-	r := gin.Default()
-
-	// Define the route for the endpoint /ping
-	// The context c is the object that allows us to interact with the request and response
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run(portNumber) // Run the server 
+	// Initialize the Initialize function from router package
+	// In Go you don't import the file, you import the package
+	router.Initialize()
 }
