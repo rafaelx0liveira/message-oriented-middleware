@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Initialize is used to initialize the routes
 func Initialize(){
 		// const for the port number
 		const portNumber = ":8080"
@@ -11,12 +12,8 @@ func Initialize(){
 		// Initialize the router 
 		router := gin.Default()
 	
-		// Define the route for the endpoint /ping
-		// The context c is the object that allows us to interact with the request and response
-		router.GET("/ping", func(c *gin.Context) {
-			c.JSON(200, gin.H{
-				"message": "pong",
-			})
-		})
+		// Initialize the routes
+		InitializeRoutes(router)
+
 		router.Run(portNumber) // Run the server 
 }
