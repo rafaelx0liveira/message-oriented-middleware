@@ -29,6 +29,12 @@ func NewLogger(prefix string) *Logger {
 	}
 }
 
+func GetLogger(prefix string) *Logger {
+	// Initialize logger
+	logger := NewLogger(prefix)
+	return logger
+}
+
 // Created Non-fomatted functions to log
 
 // The spread operator (...) is used to pass a slice of arguments
