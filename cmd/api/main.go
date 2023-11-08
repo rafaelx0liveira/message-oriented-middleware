@@ -12,7 +12,10 @@ var (
 )
 
 func main() {
+	// Set the Gin to release mode
 	gin.SetMode(gin.ReleaseMode)
+
+	// Initialize the logger
 	logger = config.GetLogger("main")
 
 	// Print a message informing that the application is starting
