@@ -9,6 +9,7 @@ type Publish struct {
 }
 
 func (p *Publish) Validate () error {
+
 	if p.Content == "" {
 		return util.ErrParamIsRequired("Content", "string")
 	}
