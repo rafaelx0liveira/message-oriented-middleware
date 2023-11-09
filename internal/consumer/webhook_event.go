@@ -1,7 +1,9 @@
 package consumer
 
+import "time"
+
 type WebhookEvent struct {
-	EventID   int
-	EventType string
-	Message   string
+	PostData  *WebhookData
+	Timeout   int
+	StartTime time.Time
 }
