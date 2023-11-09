@@ -1,9 +1,10 @@
-package main
+package api
 
 import (
+	"message-oriented-middleware/internal/message_server/api/config"
+	"message-oriented-middleware/internal/message_server/api/router"
+
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/config"
-	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/router"
 )
 
 // Define a global variable to store the logger
@@ -11,7 +12,7 @@ var (
 	logger *config.Logger
 )
 
-func main() {
+func InitAPI() {
 	// Set the Gin to release mode
 	gin.SetMode(gin.ReleaseMode)
 

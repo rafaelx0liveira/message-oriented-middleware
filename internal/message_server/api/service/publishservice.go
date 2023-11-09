@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/config"
-	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/model"
-	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/util"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/config"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/model"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/util"
 	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/messagepublisher"
 )
 
