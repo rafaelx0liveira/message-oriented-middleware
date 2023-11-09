@@ -2,9 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/config"
-	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/model"
-	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/service"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/config"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/model"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/service"
 )
 
 // Define a global variable to store the logger

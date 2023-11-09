@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/config"
-	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/router"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/config"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/router"
 )
 
 // Define a global variable to store the logger

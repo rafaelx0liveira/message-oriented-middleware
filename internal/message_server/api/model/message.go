@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/rafaelx0liveira/message-oriented-middleware/cmd/api/util"
 	"github.com/google/uuid"
+	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/api/util"
 )
 
 type Message struct {
