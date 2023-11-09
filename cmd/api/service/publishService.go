@@ -11,13 +11,14 @@ import (
 )
 
 // Function to validate receiving a request
-func ValidateRequest(c *gin.Context, request model.Publish, logger *config.Logger) {
+func ValidateRequest(c *gin.Context, message *model.Message, logger *config.Logger) {
 	// Validate the request
-	if err := request.Validate(); err != nil {
+	if err := message.Validate(); err != nil {
 		logger.Error(err.Error())
 		util.SendError(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	fmt.Printf("Request on SERVICE: %s\n", request)
+	fmt.Printf("Request on SERVICE: %+v\n", *message)
+
 }

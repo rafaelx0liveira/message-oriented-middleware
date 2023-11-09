@@ -14,18 +14,18 @@ var (
 
 // Publish is used to publish a message
 func PublishController (c *gin.Context) {
-	// Initialize the request variable with the model.Publish struct
-	request := model.Publish{}
+	// Initialize the message variable with the model.Message struct
+	message := model.Message{}
 
-	// Bind the request body to the request variable
+	// Bind the request body to the message variable
 	// This process (fill in a struct with the request body) is called "hydration"
-	c.BindJSON(&request)
+	c.BindJSON(&message)
 
 	// Initialize the logger
 	logger = config.GetLogger("PublishController")
 
 	// Call the ValidateRequest function from service package
-	service.ValidateRequest(c, request, logger)
+	service.ValidateRequest(c, &message, logger)
 
 	// fmt.Printf("Request: %s\n", request)
 }
