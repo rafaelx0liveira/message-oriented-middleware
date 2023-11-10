@@ -35,5 +35,8 @@ func PublishController(c *gin.Context) {
 	}
 
 	// Send a response to the client
-	util.SendSuccess(c, "PublishController", message)
+	util.SendSuccess(c, "publish message", message)
+
+	// Log the successful message
+	logger.Infof("Successfully published message: {ID: %v, Content: %v}", message.ID, message.Content)
 }
