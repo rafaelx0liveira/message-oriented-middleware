@@ -4,6 +4,7 @@ import (
 	"broker/internal/api/config"
 	"broker/internal/api/model"
 	"broker/internal/api/service"
+	"broker/internal/api/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +27,13 @@ func PublishController(c *gin.Context) {
 	logger = config.GetLogger("PublishController")
 
 	// Call the ValidateRequest function from service package
-	service.ValidateRequest(c, &message, logger)
+	err := service.ValidateRequest(c, &message, logger)
 
-	// fmt.Printf("Request: %s\n", request)
+	if err != nil {
+		logger.Error(err.Error())
+		return
+	}
+
+	// Send a response to the client
+	util.SendSuccess(c, "PublishController", message)
 }
