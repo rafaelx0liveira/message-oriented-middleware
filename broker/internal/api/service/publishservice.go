@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"net/http"
 
 	"broker/internal/api/config"
@@ -13,16 +12,21 @@ import (
 )
 
 // Function to validate receiving a request
-func ValidateRequest(c *gin.Context, message *model.Message, logger *config.Logger) {
+func ValidateRequest(c *gin.Context, message *model.Message, logger *config.Logger) error{
 	// Validate the request
 	if err := message.Validate(); err != nil {
 		logger.Error(err.Error())
 		util.SendError(c, http.StatusBadRequest, err.Error())
-		return
+		return err
 	}
 
-	messagepublisher.Init()
+	err := messagepublisher.PublishMessage(message, logger)
 
-	fmt.Printf("Request on SERVICE: %+v\n", *message)
+	if err != nil {
+		logger.Error(err.Error())
+		util.SendError(c, http.StatusInternalServerError, err.Error())
+		return err
+	}
 
+	return nil
 }
