@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/google/uuid"
-	"github.com/rafaelx0liveira/message-oriented-middleware/internal/message_server/api/util"
+	"message_server/api/util"
 )
 
 type Message struct {

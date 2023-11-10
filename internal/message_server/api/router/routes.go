@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"message-oriented-middleware/internal/message_server/api/controller"
+	"message_server/api/controller"
 )
 
 // InitializeRoutes is used to initialize the routes
