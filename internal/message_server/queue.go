@@ -8,9 +8,9 @@ var (
 )
 
 type Queue interface {
-	Enqueue(*Message) error
-	Dequeue() (*Message, error)
-	Len() int
+	enqueue(*Message) error
+	dequeue() (*Message, error)
+	len() int
 }
 
 type SliceQueue []*Message
@@ -19,16 +19,16 @@ func NewSliceQueue() Queue {
 	return &SliceQueue{}
 }
 
-func (q *SliceQueue) Len() int {
+func (q *SliceQueue) len() int {
 	return len(*q)
 }
 
-func (q *SliceQueue) Enqueue(value *Message) error {
+func (q *SliceQueue) enqueue(value *Message) error {
 	*q = append(*q, value)
 	return nil
 }
 
-func (q *SliceQueue) Dequeue() (*Message, error) {
+func (q *SliceQueue) dequeue() (*Message, error) {
 	queue := *q
 	if len(*q) > 0 {
 		card := queue[0]
