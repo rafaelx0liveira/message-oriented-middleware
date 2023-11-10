@@ -1,8 +1,8 @@
 package api
 
 import (
-	"message-oriented-middleware/internal/message_server/api/config"
-	"message-oriented-middleware/internal/message_server/api/router"
+	"message_server/api/config"
+	"message_server/api/router"
 
 	"github.com/gin-gonic/gin"
 )
