@@ -1,15 +1,14 @@
 package internal
 
 import (
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestCreateQueue_ShouldCreateQueue(t *testing.T) {
 	assert := assert.New(t)
 
-	queue := NewSliceQueue()
+	queue := NewSliceQueue[Message]()
 
 	assert.NotNil(queue)
 }
@@ -17,7 +16,7 @@ func TestCreateQueue_ShouldCreateQueue(t *testing.T) {
 func TestEnqueue_ShouldEnqueueMessage(t *testing.T) {
 	assert := assert.New(t)
 
-	queue := &SliceQueue{}
+	queue := &SliceQueue[Message]{}
 	queue.enqueue(NewMessage(1, "First message"))
 
 	assert.Equal(1, (*queue)[0].ID)
@@ -34,7 +33,7 @@ func TestEnqueue_ShouldEnqueueMessage(t *testing.T) {
 func TestDequeue_ShouldDequeueMessage(t *testing.T) {
 	assert := assert.New(t)
 
-	queue := &SliceQueue{}
+	queue := &SliceQueue[Message]{}
 
 	queue.enqueue(NewMessage(1, "Hello Go"))
 	dequeuedMessage, err := queue.dequeue()
@@ -50,7 +49,7 @@ func TestGetQueueLength_ShouldReturnLength(t *testing.T) {
 	assert := assert.New(t)
 
 	//queue -> []*Message
-	queue := &SliceQueue{}
+	queue := &SliceQueue[Message]{}
 
 	assert.Equal(0, queue.len())
 
@@ -67,7 +66,7 @@ func TestGetQueueLength_ShouldReturnLength(t *testing.T) {
 
 func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
 	type args struct {
-		queue       *SliceQueue
+		queue       *SliceQueue[Message]
 		enqueueMsgs []Message
 		dequeueMsgs int
 	}
@@ -77,11 +76,11 @@ func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
 		arguments args
 		want      int
 	}{
-		{"Test len 0", args{queue: &SliceQueue{}, enqueueMsgs: []Message{}, dequeueMsgs: 0}, 0},
-		{"Test len 0 - Only Dequeue", args{queue: &SliceQueue{}, enqueueMsgs: []Message{}, dequeueMsgs: 1}, 0},
+		{"Test len 0", args{queue: &SliceQueue[Message]{}, enqueueMsgs: []Message{}, dequeueMsgs: 0}, 0},
+		{"Test len 0 - Only Dequeue", args{queue: &SliceQueue[Message]{}, enqueueMsgs: []Message{}, dequeueMsgs: 1}, 0},
 		{"Test len 3 - Only Enqueue",
 			args{
-				queue: &SliceQueue{},
+				queue: &SliceQueue[Message]{},
 				enqueueMsgs: []Message{
 					{ID: 1, Content: "Mesg 1"},
 					{ID: 2, Content: "Mesg 2"},
@@ -89,7 +88,7 @@ func TestGetQueueLength_ShouldReturnLength2(t *testing.T) {
 				},
 				dequeueMsgs: 0,
 			}, 3},
-		{"Te len 2 - Enqueue and Dequeue", args{queue: &SliceQueue{},
+		{"Te len 2 - Enqueue and Dequeue", args{queue: &SliceQueue[Message]{},
 			enqueueMsgs: []Message{
 				{ID: 1, Content: "Mesg 1"},
 				{ID: 2, Content: "Mesg 2"},
