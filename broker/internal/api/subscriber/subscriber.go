@@ -6,12 +6,13 @@ import (
 	"broker/internal/api/model"
 )
 
-func PublishTicket(message *model.WebhookData, logger *config.Logger) error{
+func Subscriber(webhookdata *model.WebhookData, logger *config.Logger) error{
+
 	broker := internal.NewBroker()
-
-	newMessage := internal.NewMessage(message.ID, message.Content)
-
-	err := broker.SendMessage(newMessage)
+	
+	subscriber := internal.NewSubscriber(webhookdata.EventID, webhookdata.EventType, webhookdata.MessageData)
+	
+	err := broker.RegisterSubscriber(subscriber)
 
 	if err != nil {
 		logger.Errorf("Error while publishing message: %s", err.Error())

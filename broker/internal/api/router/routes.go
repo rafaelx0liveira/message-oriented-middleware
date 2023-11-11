@@ -18,6 +18,6 @@ func InitializeRoutes(router *gin.Engine) {
 		// GET /api/v1/subscribe for subscribing a webhook
 		// The Subscribe function is from controllers package
 		// Who inserts the Context in the Subscribe function is the Gin
-		v1.GET("/subscribe", controller.SubscribeController)
+		v1.POST("/subscribe", controller.SubscribeController)
 	}
 }
