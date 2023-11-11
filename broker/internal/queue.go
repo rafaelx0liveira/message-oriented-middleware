@@ -7,35 +7,35 @@ var (
 	ErrQueueFull  = errors.New("queue full")
 )
 
-type Queue interface {
-	enqueue(*Message) error
-	dequeue() (*Message, error)
+type Queue[T any] interface {
+	enqueue(*T) error
+	dequeue() (*T, error)
 	len() int
 }
 
-type SliceQueue []*Message
+type SliceQueue[T any] []*T
 
-func NewSliceQueue() Queue {
-	return &SliceQueue{}
+func NewSliceQueue[T any]() Queue[T] {
+	return &SliceQueue[T]{}
 }
 
-func (q *SliceQueue) len() int {
+func (q *SliceQueue[T]) len() int {
 	return len(*q)
 }
 
-func (q *SliceQueue) enqueue(value *Message) error {
+func (q *SliceQueue[T]) enqueue(value *T) error {
 	*q = append(*q, value)
 	return nil
 }
 
-func (q *SliceQueue) dequeue() (*Message, error) {
+func (q *SliceQueue[T]) dequeue() (*T, error) {
 	queue := *q
 	if len(*q) > 0 {
-		card := queue[0]
+		element := queue[0]
 		*q = queue[1:]
-		return card, nil
+		return element, nil
 	}
 
-	var empty Message
+	var empty T
 	return &empty, ErrQueueEmpty
 }
