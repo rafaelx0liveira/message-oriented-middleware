@@ -9,13 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Define a global variable to store the logger
-var (
-	logger *config.Logger
-)
-
 // Publish is used to publish a message
 func PublishController(c *gin.Context) {
+
+	// Define a variable to store the logger
+	var logger *config.Logger
+
 	// Initialize the message variable with the model.Message struct
 	message := model.Message{}
 
