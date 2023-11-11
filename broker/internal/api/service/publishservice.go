@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"broker/internal/api/config"
-	"broker/internal/api/messagepublisher"
+	"broker/internal/api/publisher"
 	"broker/internal/api/model"
 	"broker/internal/api/util"
 
@@ -12,7 +12,7 @@ import (
 )
 
 // Function to validate receiving a request
-func ValidateRequest(c *gin.Context, message *model.Message, logger *config.Logger) error{
+func ValidatePublishRequest(c *gin.Context, message *model.Message, logger *config.Logger) error{
 	// Validate the request
 	if err := message.Validate(); err != nil {
 		logger.Error(err.Error())
@@ -20,7 +20,7 @@ func ValidateRequest(c *gin.Context, message *model.Message, logger *config.Logg
 		return err
 	}
 
-	err := messagepublisher.PublishMessage(message, logger)
+	err := publisher.PublishMessage(message, logger)
 
 	if err != nil {
 		logger.Error(err.Error())

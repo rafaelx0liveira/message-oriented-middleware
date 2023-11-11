@@ -25,8 +25,8 @@ func PublishController(c *gin.Context) {
 	// Initialize the logger
 	logger = config.GetLogger("PublishController")
 
-	// Call the ValidateRequest function from service package
-	err := service.ValidateRequest(c, &message, logger)
+	// Call the ValidatePublishRequest function from service package
+	err := service.ValidatePublishRequest(c, &message, logger)
 
 	if err != nil {
 		logger.Error(err.Error())
