@@ -1,5 +1,7 @@
 package internal
 
+import "fmt"
+
 type Broker struct {
 	MessageQueues   []Queue[Message]
 	SubscriberQueue Queue[Subscriber]
@@ -9,6 +11,7 @@ type Broker struct {
 func NewBroker() *Broker {
 	broker := &Broker{}
 	broker.appendMessageQueue(NewSliceQueue[Message]())
+	broker.SubscriberQueue = NewSliceQueue[Subscriber]()
 	return broker
 }
 
@@ -21,6 +24,7 @@ func (b *Broker) ReceiveMessage() (*Message, error) {
 }
 
 func (b *Broker) RegisterSubscriber(subscriber *Subscriber) error {
+	fmt.Print((b.SubscriberQueue.len()))
 	return b.SubscriberQueue.enqueue(subscriber)
 }
 
