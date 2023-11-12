@@ -1,11 +1,9 @@
 package messagepublisher
 
 import (
-	"fmt"
+	"broker/internal"
 )
 
-func Init() {
-	fmt.Printf("Hello World!")
+func Init(broker *internal.Broker) {
+	broker.SendMessage(&internal.Message{Content: "Hello World!"})
 }
-
-

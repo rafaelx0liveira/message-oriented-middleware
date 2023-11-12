@@ -1,6 +1,9 @@
 package internal
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type Broker struct {
 	MessageQueues   []Queue[Message]
@@ -13,6 +16,13 @@ func NewBroker() *Broker {
 	broker.appendMessageQueue(NewSliceQueue[Message]())
 	broker.SubscriberQueue = NewSliceQueue[Subscriber]()
 	return broker
+}
+
+func (b *Broker) Init() {
+	for {
+		fmt.Println("Executing broker")
+		time.Sleep(time.Millisecond)
+	}
 }
 
 func (b *Broker) SendMessage(message *Message) error {
