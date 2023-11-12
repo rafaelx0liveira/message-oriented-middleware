@@ -42,4 +42,5 @@ func PublishController(c *gin.Context) {
 
 	// Log the successful message
 	logger.Infof("Successfully published message: {ID: %v, Content: %v}", message.ID, message.Content)
+
 }

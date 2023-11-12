@@ -3,11 +3,11 @@ package service
 import (
 	"net/http"
 
+	"broker/internal"
 	"broker/internal/api/config"
 	"broker/internal/api/publisher"
 	"broker/internal/api/model"
 	"broker/internal/api/util"
-	"broker/internal"
 	"github.com/gin-gonic/gin"
 )
 

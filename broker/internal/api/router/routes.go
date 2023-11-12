@@ -1,8 +1,8 @@
 package router
 
 import (
-	"broker/internal/api/controller"
 	"broker/internal"
+	"broker/internal/api/controller"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +15,7 @@ func InitializeRoutes(router *gin.Engine, broker *internal.Broker) {
 		// Who inserts the Context in the Publish function is the Gin
 		v1.POST("/publish", func(c *gin.Context) {
 			c.Set("broker", broker)
+			
 			controller.PublishController(c)
 		})
 
