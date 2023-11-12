@@ -1,9 +1,9 @@
-package main
+package api
 
 import (
 	"broker/internal/api/config"
 	"broker/internal/api/router"
-
+	"broker/internal"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +12,7 @@ var (
 	logger *config.Logger
 )
 
-func main() {
+func InitAPI(broker *internal.Broker) {
 	// Set the Gin to release mode
 	gin.SetMode(gin.ReleaseMode)
 
@@ -24,5 +24,5 @@ func main() {
 	
 	// Initialize the Initialize function from router package
 	// In Go you don't import the file, you import the package
-	router.Initialize()
+	router.Initialize(broker)
 }

@@ -2,10 +2,11 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"broker/internal"
 )
 
 // Initialize is used to initialize the routes
-func Initialize(){
+func Initialize(broker *internal.Broker){
 		// const for the port number
 		const portNumber = ":8080"
 
@@ -13,7 +14,7 @@ func Initialize(){
 		router := gin.Default()
 	
 		// Initialize the routes
-		InitializeRoutes(router)
+		InitializeRoutes(router, broker)
 
 		router.Run(portNumber) // Run the server 
 }

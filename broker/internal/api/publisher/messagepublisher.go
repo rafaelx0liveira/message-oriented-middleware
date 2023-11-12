@@ -6,9 +6,7 @@ import (
 	"broker/internal/api/model"
 )
 
-func PublishMessage(message *model.Message, logger *config.Logger) error{
-	broker := internal.NewBroker()
-
+func PublishMessage(message *model.Message, logger *config.Logger, broker *internal.Broker) error{
 	newMessage := internal.NewMessage(message.ID, message.Content)
 
 	err := broker.SendMessage(newMessage)
