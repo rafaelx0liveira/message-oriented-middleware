@@ -1,12 +1,11 @@
 package consumer
 
 import (
-	"bytes"
 	"consumer/client"
 	"container/list"
 	"encoding/json"
 	"errors"
-	"net/http"
+	"sync"
 	"time"
 )
 
@@ -14,6 +13,7 @@ type Consumer struct {
 	Client             *client.ConsumerClient
 	LocalURL           string
 	RemoteURL          string
+	ListMutex          *sync.Mutex
 	LaunchedHooks      list.List
 	DefaultHookTimeOut int
 }
@@ -25,11 +25,13 @@ func NewConsumer(localURL string, remoteURL string, postURL string, timeOut int)
 		Client:             client.NewConsumerClient(remoteURL, postURL),
 		LocalURL:           localURL,
 		RemoteURL:          remoteURL,
+		ListMutex:          &sync.Mutex{},
 		LaunchedHooks:      *list.New(),
 		DefaultHookTimeOut: timeOut,
 	}
 }
 
+// Thread A
 // Internal:
 func (c *Consumer) processIncomingMsg(msg string) {
 	print("Mensagem Recebida: " + msg)
@@ -37,6 +39,7 @@ func (c *Consumer) processIncomingMsg(msg string) {
 
 // Public:
 func (c *Consumer) HookCB(webhookResult *WebhookData) {
+	c.ListMutex.Lock()
 	listItem := c.LaunchedHooks.Front()
 
 	println("CB recebido")
@@ -61,6 +64,7 @@ func (c *Consumer) HookCB(webhookResult *WebhookData) {
 
 		listItem = listItem.Next()
 	}
+	c.ListMutex.Unlock()
 }
 
 func (c *Consumer) LaunchHook() error {
@@ -79,11 +83,11 @@ func (c *Consumer) LaunchHook() error {
 		panic(err)
 	}
 
-	resp, err := http.Post(c.RemoteURL, "application/hook", bytes.NewBuffer(jsonData))
-	if err != nil {
-		panic(err)
+	errPost := c.Client.PostWebhook(jsonData)
+
+	if errPost != nil {
+		panic(errPost)
 	}
-	defer resp.Body.Close()
 
 	webhookEvent := &WebhookEvent{
 		PostData:  &data,
@@ -93,4 +97,41 @@ func (c *Consumer) LaunchHook() error {
 	c.LaunchedHooks.PushBack(webhookEvent)
 
 	return err
+}
+
+// Thread B
+func (c *Consumer) checkExpiredHooks() {
+
+	listItem := c.LaunchedHooks.Front()
+
+	for i := 0; i < c.LaunchedHooks.Len() && listItem != nil; i++ {
+		event := (listItem.Value).(*WebhookEvent)
+
+		startTime := event.StartTime
+
+		if time.Since(startTime) < time.Duration(event.Timeout)*time.Second {
+			c.LaunchedHooks.Remove(listItem)
+			print("Removido Webhook expirado!")
+		}
+
+		listItem = listItem.Next()
+	}
+}
+
+// launchInterval in ms
+func (c *Consumer) LaunchHooksPeriodically(launchInterval int) {
+	for {
+		c.ListMutex.Lock()
+		err := c.LaunchHook()
+		c.ListMutex.Unlock()
+		if err != nil {
+			panic(err)
+		}
+
+		c.ListMutex.Lock()
+		c.checkExpiredHooks()
+		c.ListMutex.Unlock()
+
+		time.Sleep(time.Millisecond * time.Duration(launchInterval))
+	}
 }
