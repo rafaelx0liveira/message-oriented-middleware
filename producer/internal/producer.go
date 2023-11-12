@@ -1,14 +1,14 @@
 package internal
 
 import (
+	"encoding/json"
 	"producer/client"
 	"strconv"
-	"encoding/json"
 	"time"
 )
 
 type Producer struct {
-	Client 	*client.ProducerClient
+	Client  *client.ProducerClient
 	Message string
 	Seconds int
 }
@@ -17,10 +17,11 @@ type Message struct {
 	Content string `json:"content"`
 }
 
-func NewProducer(postURL string, postEndpoint string, message string) *Producer {
+func NewProducer(postURL string, postEndpoint string, message string, msgTime int) *Producer {
 	return &Producer{
-		Client: client.NewProducerClient(postURL, postEndpoint),
+		Client:  client.NewProducerClient(postURL, postEndpoint),
 		Message: message,
+		Seconds: msgTime,
 	}
 }
 

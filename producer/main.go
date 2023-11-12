@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	producer := pr.NewProducer("http://localhost:8080", "application/json", "Hello World!")
+	producer := pr.NewProducer("http://localhost:8180/api/v1/publish", "application/json", "Gonheç!", 1)
 
 	producer.SendMsg()
 }

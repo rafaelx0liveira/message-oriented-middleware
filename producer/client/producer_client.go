@@ -1,8 +1,8 @@
 package client
 
 import (
-	"net/http"
 	"bytes"
+	"net/http"
 )
 
 type ProducerClient struct {
