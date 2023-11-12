@@ -31,14 +31,14 @@ func TestSendMessageToBroker_ShouldSendMessage(t *testing.T) {
 	assert := assert.New(t)
 
 	broker := NewBroker()
-	message := NewMessage(1, "First message")
+	message := NewMessage("1", "First message")
 
 	err := broker.SendMessage(message)
 
 	assert.Nil(err)
 	assert.Equal(1, broker.MessageQueues[0].len())
 
-	message = NewMessage(2, "Second message")
+	message = NewMessage("2", "Second message")
 	err = broker.SendMessage(message)
 	assert.Nil(err)
 
@@ -47,10 +47,10 @@ func TestSendMessageToBroker_ShouldSendMessage(t *testing.T) {
 	firstMsg, _ := broker.MessageQueues[0].dequeue()
 	secondMsg, _ := broker.MessageQueues[0].dequeue()
 
-	assert.Equal(1, firstMsg.ID)
+	assert.Equal("1", firstMsg.ID)
 	assert.Equal("First message", firstMsg.Content)
 
-	assert.Equal(2, secondMsg.ID)
+	assert.Equal("2", secondMsg.ID)
 	assert.Equal("Second message", secondMsg.Content)
 }
 
@@ -58,23 +58,23 @@ func TestReceiveMessageToBroker_ShouldReceiveMessage(t *testing.T) {
 	assert := assert.New(t)
 
 	broker := NewBroker()
-	message := NewMessage(1, "First message")
+	message := NewMessage("1", "First message")
 
 	err := broker.MessageQueues[0].enqueue(message)
 
 	assert.Nil(err)
 	assert.Equal(1, broker.MessageQueues[0].len())
 
-	message = NewMessage(2, "Second message")
+	message = NewMessage("2", "Second message")
 	err = broker.MessageQueues[0].enqueue(message)
 	assert.Nil(err)
 
-	firstMsg, _ := broker.ReceiveMessage()
-	secondMsg, _ := broker.ReceiveMessage()
+	firstMsg, _ := broker.receiveMessage()
+	secondMsg, _ := broker.receiveMessage()
 
-	assert.Equal(1, firstMsg.ID)
+	assert.Equal("1", firstMsg.ID)
 	assert.Equal("First message", firstMsg.Content)
 
-	assert.Equal(2, secondMsg.ID)
+	assert.Equal("2", secondMsg.ID)
 	assert.Equal("Second message", secondMsg.Content)
 }
