@@ -4,17 +4,17 @@ import (
 	"broker/internal/api/config"
 	"broker/internal/api/model"
 	"broker/internal/api/service"
+	"broker/internal/api/util"
 
 	"github.com/gin-gonic/gin"
 )
 
-// Define a global variable to store the logger
-var (
-	logger *config.Logger
-)
-
 // Publish is used to publish a message
 func PublishController(c *gin.Context) {
+
+	// Define a variable to store the logger
+	var logger *config.Logger
+
 	// Initialize the message variable with the model.Message struct
 	message := model.Message{}
 
@@ -25,8 +25,17 @@ func PublishController(c *gin.Context) {
 	// Initialize the logger
 	logger = config.GetLogger("PublishController")
 
-	// Call the ValidateRequest function from service package
-	service.ValidateRequest(c, &message, logger)
+	// Call the ValidatePublishRequest function from service package
+	err := service.ValidatePublishRequest(c, &message, logger)
 
-	// fmt.Printf("Request: %s\n", request)
+	if err != nil {
+		logger.Error(err.Error())
+		return
+	}
+
+	// Send a response to the client
+	util.SendSuccess(c, "publish message", message)
+
+	// Log the successful message
+	logger.Infof("Successfully published message: {ID: %v, Content: %v}", message.ID, message.Content)
 }

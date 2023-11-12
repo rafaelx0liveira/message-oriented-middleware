@@ -2,7 +2,6 @@ package model
 
 import (
 	"broker/internal/api/util"
-
 	"github.com/google/uuid"
 )
 

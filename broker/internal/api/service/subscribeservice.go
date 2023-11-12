@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"broker/internal/api/config"
-	"broker/internal/api/publisher"
+	"broker/internal/api/subscriber"
 	"broker/internal/api/model"
 	"broker/internal/api/util"
 
@@ -12,15 +12,15 @@ import (
 )
 
 // Function to validate receiving a request
-func ValidatePublishRequest(c *gin.Context, message *model.Message, logger *config.Logger) error{
+func ValidateSubscribeRequest(c *gin.Context, webhookdata *model.WebhookData, logger *config.Logger) error{
 	// Validate the request
-	if err := message.Validate(); err != nil {
+	if err := webhookdata.Validate(); err != nil {
 		logger.Error(err.Error())
 		util.SendError(c, http.StatusBadRequest, err.Error())
 		return err
 	}
 
-	err := publisher.PublishMessage(message, logger)
+	err := subscriber.Subscriber(webhookdata, logger)
 
 	if err != nil {
 		logger.Error(err.Error())

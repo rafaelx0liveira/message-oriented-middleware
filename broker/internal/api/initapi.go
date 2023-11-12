@@ -1,4 +1,4 @@
-package api
+package main
 
 import (
 	"broker/internal/api/config"
@@ -12,7 +12,7 @@ var (
 	logger *config.Logger
 )
 
-func InitAPI() {
+func main() {
 	// Set the Gin to release mode
 	gin.SetMode(gin.ReleaseMode)
 

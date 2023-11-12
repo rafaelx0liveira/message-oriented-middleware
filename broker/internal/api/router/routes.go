@@ -15,9 +15,9 @@ func InitializeRoutes(router *gin.Engine) {
 		// Who inserts the Context in the Publish function is the Gin
 		v1.POST("/publish", controller.PublishController)
 
-		// GET /api/v1/receive for receiving a message
-		// The Receive function is from controllers package
-		// Who inserts the Context in the Receive function is the Gin
-		v1.GET("/receive", controller.ReceiveController)
+		// GET /api/v1/subscribe for subscribing a webhook
+		// The Subscribe function is from controllers package
+		// Who inserts the Context in the Subscribe function is the Gin
+		v1.POST("/subscribe", controller.SubscribeController)
 	}
 }
