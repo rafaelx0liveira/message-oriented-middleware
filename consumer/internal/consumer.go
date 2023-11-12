@@ -2,6 +2,7 @@ package consumer
 
 import (
 	"bytes"
+	"consumer/client"
 	"container/list"
 	"encoding/json"
 	"net/http"
@@ -9,14 +10,16 @@ import (
 )
 
 type Consumer struct {
+	Client             *client.ConsumerClient
 	LocalURL           string
 	RemoteURL          string
 	LaunchedHooks      list.List
 	DefaultHookTimeOut int
 }
 
-func NewConsumer(localURL string, remoteURL string, timeOut int) *Consumer {
+func NewConsumer(localURL string, remoteURL string, postURL string, timeOut int) *Consumer {
 	return &Consumer{
+		Client:             client.NewConsumerClient(remoteURL, postURL),
 		LocalURL:           localURL,
 		RemoteURL:          remoteURL,
 		LaunchedHooks:      *list.New(),
@@ -32,6 +35,11 @@ func (c *Consumer) processIncomingMsg(msg string) {
 // Public:
 func (c *Consumer) HookCB(webhookResult *WebhookData) {
 	listItem := c.LaunchedHooks.Front()
+
+	println("CB recebido")
+	println(webhookResult.EventID)
+	println(webhookResult.EventType)
+	println(webhookResult.MessageData)
 
 	for i := 0; i < c.LaunchedHooks.Len(); i++ {
 		event := (listItem.Value).(*WebhookEvent)
