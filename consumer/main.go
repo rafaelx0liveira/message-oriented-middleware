@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	consumer := inter.NewConsumer("http://127.0.0.1:8180", "http://127.0.0.1:7779", "/api/v1/subscribe", 30)
+	consumer := inter.NewConsumer("http://127.0.0.1:8181/api/v1/webhook", "http://127.0.0.1:8180/api/v1/subscribe", "application/json", 1000)
 
 	var wg sync.WaitGroup
 	wg.Add(2)

@@ -14,19 +14,19 @@ type Consumer struct {
 	LocalURL           string
 	RemoteURL          string
 	ListMutex          *sync.Mutex
-	LaunchedHooks      list.List
+	LaunchedHooks      *list.List
 	DefaultHookTimeOut int
 }
 
 const MAX_HOOKS = 1000
 
-func NewConsumer(localURL string, remoteURL string, postURL string, timeOut int) *Consumer {
+func NewConsumer(localURL string, remoteURL string, contentType string, timeOut int) *Consumer {
 	return &Consumer{
-		Client:             client.NewConsumerClient(remoteURL, postURL),
+		Client:             client.NewConsumerClient(remoteURL, contentType),
 		LocalURL:           localURL,
 		RemoteURL:          remoteURL,
 		ListMutex:          &sync.Mutex{},
-		LaunchedHooks:      *list.New(),
+		LaunchedHooks:      list.New(),
 		DefaultHookTimeOut: timeOut,
 	}
 }
@@ -40,12 +40,13 @@ func (c *Consumer) processIncomingMsg(msg string) {
 // Public:
 func (c *Consumer) HookCB(webhookResult *WebhookData) {
 	c.ListMutex.Lock()
-	listItem := c.LaunchedHooks.Front()
 
 	println("CB recebido")
 	println(webhookResult.EventID)
 	println(webhookResult.EventType)
 	println(webhookResult.MessageData)
+
+	listItem := c.LaunchedHooks.Front()
 
 	for i := 0; i < c.LaunchedHooks.Len(); i++ {
 		event := (listItem.Value).(*WebhookEvent)
@@ -101,15 +102,14 @@ func (c *Consumer) LaunchHook() error {
 
 // Thread B
 func (c *Consumer) checkExpiredHooks() {
-
 	listItem := c.LaunchedHooks.Front()
 
-	for i := 0; i < c.LaunchedHooks.Len() && listItem != nil; i++ {
-		event := (listItem.Value).(*WebhookEvent)
+	for i := 0; i < c.LaunchedHooks.Len(); i++ {
+		event := listItem.Value.(*WebhookEvent)
 
 		startTime := event.StartTime
 
-		if time.Since(startTime) < time.Duration(event.Timeout)*time.Second {
+		if time.Since(startTime) >= time.Duration(event.Timeout)*time.Second {
 			c.LaunchedHooks.Remove(listItem)
 			print("Removido Webhook expirado!")
 		}
@@ -124,6 +124,7 @@ func (c *Consumer) LaunchHooksPeriodically(launchInterval int) {
 		c.ListMutex.Lock()
 		err := c.LaunchHook()
 		c.ListMutex.Unlock()
+
 		if err != nil {
 			panic(err)
 		}

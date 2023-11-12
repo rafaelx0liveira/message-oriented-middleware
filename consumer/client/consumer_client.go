@@ -6,16 +6,16 @@ import (
 )
 
 type ConsumerClient struct {
-	HttpClient   *http.Client
-	PostURL      string
-	PostEndpoint string
+	HttpClient  *http.Client
+	PostURL     string
+	ContentType string
 }
 
-func NewConsumerClient(postURL string, postEndpoint string) *ConsumerClient {
+func NewConsumerClient(postURL string, contentType string) *ConsumerClient {
 	return &ConsumerClient{
-		HttpClient:   &http.Client{},
-		PostURL:      postURL,
-		PostEndpoint: postEndpoint,
+		HttpClient:  &http.Client{},
+		PostURL:     postURL,
+		ContentType: contentType,
 	}
 }
 
@@ -26,7 +26,7 @@ func (cc *ConsumerClient) PostWebhook(postBody []byte) error {
 		panic(err)
 	}
 
-	request.Header.Add("Content-Type", cc.PostEndpoint)
+	request.Header.Add("Content-Type", cc.ContentType)
 
 	result, hcerr := cc.HttpClient.Do(request)
 

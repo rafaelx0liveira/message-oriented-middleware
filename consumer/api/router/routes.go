@@ -14,7 +14,7 @@ func InitializeRoutes(router *gin.Engine, consumer *con.Consumer) {
 		// POST /api/v1/publish for publishing a message
 		// The Publish function is from controllers package
 		// Who inserts the Context in the Publish function is the Gin
-		v1.POST("/publish", func(c *gin.Context) {
+		v1.POST("/webhook", func(c *gin.Context) {
 			c.Set("consumer", consumer)
 
 			controller.PublishController(c)
