@@ -7,7 +7,7 @@ import (
 )
 
 type WebhookData struct {
-	EventID     int 	 `json:"event_id"`
+	EventID     int    `json:"event_id"`
 	EventType   string `json:"event_type"`
 	MessageData string `json:"message_data"`
 }
@@ -26,6 +26,6 @@ func (w *WebhookData) Validate() error {
 
 	// generate a new random ID for the message
 	w.EventID = rand.Intn(100000)
-	
+
 	return nil
 }

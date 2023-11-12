@@ -38,7 +38,7 @@ func (b *Broker) Init() {
 				panic(err)
 			}
 
-			PostMessage(subscriber.ConsumerUrl, message)
+			PostMessage(subscriber, message)
 		}
 
 		b.mu.Unlock()
