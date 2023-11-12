@@ -5,6 +5,7 @@ import (
 	"consumer/client"
 	"container/list"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 )
@@ -16,6 +17,8 @@ type Consumer struct {
 	LaunchedHooks      list.List
 	DefaultHookTimeOut int
 }
+
+const MAX_HOOKS = 1000
 
 func NewConsumer(localURL string, remoteURL string, postURL string, timeOut int) *Consumer {
 	return &Consumer{
@@ -61,6 +64,10 @@ func (c *Consumer) HookCB(webhookResult *WebhookData) {
 }
 
 func (c *Consumer) LaunchHook() error {
+	if c.LaunchedHooks.Len() >= MAX_HOOKS {
+		panic(errors.New("Cant launch any more hooks"))
+	}
+
 	data := WebhookData{
 		EventID:     c.LaunchedHooks.Len(),
 		EventType:   "consume_msg",
