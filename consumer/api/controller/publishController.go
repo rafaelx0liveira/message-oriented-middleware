@@ -4,6 +4,7 @@ import (
 	"consumer/api/config"
 	"consumer/api/model"
 	"consumer/api/service"
+	con "consumer/internal"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,8 +26,11 @@ func PublishController(c *gin.Context) {
 	// Initialize the logger
 	logger = config.GetLogger("PublishController")
 
-	// Call the ValidateRequest function from service package
-	service.ValidateRequest(c, &message, logger)
+	consumer, exists := c.Get("consumer")
+	if exists {
+		// Call the ValidateRequest function from service package
+		service.ValidateRequest(c, &message, logger, consumer.(*con.Consumer))
 
-	// fmt.Printf("Request: %s\n", request)
+		// fmt.Printf("Request: %s\n", request)
+	}
 }

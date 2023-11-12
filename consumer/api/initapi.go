@@ -3,6 +3,7 @@ package api
 import (
 	"consumer/api/config"
 	"consumer/api/router"
+	con "consumer/internal"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +13,7 @@ var (
 	logger *config.Logger
 )
 
-func InitAPI() {
+func InitAPI(consumer *con.Consumer) {
 	// Set the Gin to release mode
 	gin.SetMode(gin.ReleaseMode)
 
@@ -24,5 +25,6 @@ func InitAPI() {
 
 	// Initialize the Initialize function from router package
 	// In Go you don't import the file, you import the package
-	router.Initialize()
+	router.Initialize(consumer)
+
 }
