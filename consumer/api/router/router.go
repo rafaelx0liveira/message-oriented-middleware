@@ -1,11 +1,13 @@
 package router
 
 import (
+	con "consumer/internal"
+
 	"github.com/gin-gonic/gin"
 )
 
 // Initialize is used to initialize the routes
-func Initialize() {
+func Initialize(consumer *con.Consumer) {
 	// const for the port number
 	const portNumber = ":8180"
 
@@ -13,7 +15,7 @@ func Initialize() {
 	router := gin.Default()
 
 	// Initialize the routes
-	InitializeRoutes(router)
+	InitializeRoutes(router, consumer)
 
 	router.Run(portNumber) // Run the server
 }
