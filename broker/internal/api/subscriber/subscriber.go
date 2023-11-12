@@ -6,9 +6,7 @@ import (
 	"broker/internal/api/model"
 )
 
-func Subscriber(webhookdata *model.WebhookData, logger *config.Logger) error {
-
-	broker := internal.NewBroker()
+func Subscriber(webhookdata *model.WebhookData, logger *config.Logger, broker *internal.Broker) error {
 
 	subscriber := internal.NewSubscriber(webhookdata.EventID, webhookdata.EventType, webhookdata.MessageData)
 

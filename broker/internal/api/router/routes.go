@@ -3,6 +3,7 @@ package router
 import (
 	"broker/internal"
 	"broker/internal/api/controller"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +16,17 @@ func InitializeRoutes(router *gin.Engine, broker *internal.Broker) {
 		// Who inserts the Context in the Publish function is the Gin
 		v1.POST("/publish", func(c *gin.Context) {
 			c.Set("broker", broker)
-			
+
 			controller.PublishController(c)
 		})
 
 		// GET /api/v1/subscribe for subscribing a webhook
 		// The Subscribe function is from controllers package
 		// Who inserts the Context in the Subscribe function is the Gin
-		v1.POST("/subscribe", controller.SubscribeController)
+		v1.POST("/subscribe", func(c *gin.Context) {
+			c.Set("broker", broker)
+
+			controller.SubscribeController(c)
+		})
 	}
 }
