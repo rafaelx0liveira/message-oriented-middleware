@@ -1,13 +1,14 @@
 package internal
 
 import (
-	"fmt"
+	"sync"
 	"time"
 )
 
 type Broker struct {
 	MessageQueues   []Queue[Message]
 	SubscriberQueue Queue[Subscriber]
+	mu              sync.Mutex
 }
 
 // Public:
@@ -20,25 +21,62 @@ func NewBroker() *Broker {
 
 func (b *Broker) Init() {
 	for {
-		fmt.Println("Executing broker")
-		time.Sleep(time.Millisecond)
+		b.mu.Lock()
+
+		hasSubscriber := b.subscriberQueueLength() > 0
+		hasMessages := b.messageQueueLength() > 0
+
+		if hasSubscriber && hasMessages {
+
+			subscriber, err := b.receiveSubscriber()
+			if err != nil {
+				panic(err)
+			}
+
+			message, err := b.receiveMessage()
+			if err != nil {
+				panic(err)
+			}
+
+			PostMessage(subscriber.ConsumerUrl, message)
+		}
+
+		b.mu.Unlock()
+		time.Sleep(10 * time.Millisecond)
 	}
 }
 
 func (b *Broker) SendMessage(message *Message) error {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
 	return b.MessageQueues[0].enqueue(message)
 }
 
-func (b *Broker) ReceiveMessage() (*Message, error) {
-	return b.MessageQueues[0].dequeue()
-}
-
 func (b *Broker) RegisterSubscriber(subscriber *Subscriber) error {
-	fmt.Print((b.SubscriberQueue.len()))
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
 	return b.SubscriberQueue.enqueue(subscriber)
 }
 
 // Private:
 func (b *Broker) appendMessageQueue(q Queue[Message]) {
 	b.MessageQueues = append(b.MessageQueues, q)
+}
+
+func (b *Broker) receiveMessage() (*Message, error) {
+	return b.MessageQueues[0].dequeue()
+}
+
+func (b *Broker) receiveSubscriber() (*Subscriber, error) {
+	return b.SubscriberQueue.dequeue()
+}
+
+func (b *Broker) messageQueueLength() int {
+	return b.MessageQueues[0].len()
+}
+
+func (b *Broker) subscriberQueueLength() int {
+	return b.SubscriberQueue.len()
 }

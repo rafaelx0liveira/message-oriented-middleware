@@ -6,13 +6,13 @@ import (
 )
 
 // Initialize is used to initialize the routes
-func Initialize(broker *internal.Broker) {
+func Initialize(broker *internal.Broker){
 	// const for the port number
 	const portNumber = ":8080"
 
-	// Initialize the router
+	// Initialize the router 
 	router := gin.Default()
-
+	
 	// Initialize the routes
 	InitializeRoutes(router, broker)
 
