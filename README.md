@@ -8,7 +8,7 @@ Projeto acadêmico para a matéria Sistemas Distribuídos e Computação Paralel
 
 O projeto está organizado em uma estrutura de pastas que inclui:
 
-- `cmd`: Aplicativos principais para os componentes do sistema, como `consumer_app`, `message_server_app` e `producer_app`.
+- `cmd`: Aplicativos principais para os componentes do sistema, como `consumer_app`, `broker_app` e `producer_app`.
 
 - `internal`: Pacotes internos que representam os principais componentes do sistema, incluindo `consumer`, `message_server` e `producer`.
 
@@ -16,11 +16,9 @@ O projeto está organizado em uma estrutura de pastas que inclui:
   
 ## Funcionalidades
 
-- O `consumer` é responsável por receber mensagens do Broker e processá-las.
+- O `consumer` é responsável por se inscrever na fila de inscritos, receber mensagens do Broker e processá-las.
 
 - O `producer` envia mensagens para o Broker de mensagens.
-
-- O `message_server` atua como um Broker de mensagens, gerenciando filas e garantindo a entrega de mensagens aos consumidores apropriados.
 
 - A `api` fornece endpoints para enviar e receber mensagens no Broker de mensagens.
 
@@ -28,6 +26,6 @@ O projeto está organizado em uma estrutura de pastas que inclui:
 
 ## Arquitetura
 
-<img src="docs/message-oriented-middleware architecture.png" alt="architecture image">
+<img src="docs/message-oriented-middleware-architecture.png" alt="architecture image">
 
 
