@@ -16,11 +16,9 @@ O projeto está organizado em uma estrutura de pastas que inclui:
   
 ## Funcionalidades
 
-- O `consumer` é responsável por receber mensagens do Broker e processá-las.
+- O `consumer` é responsável por se inscrever na fila de inscritos, receber mensagens do Broker e processá-las.
 
 - O `producer` envia mensagens para o Broker de mensagens.
-
-- O `message_server` atua como um Broker de mensagens, gerenciando filas e garantindo a entrega de mensagens aos consumidores apropriados.
 
 - A `api` fornece endpoints para enviar e receber mensagens no Broker de mensagens.
 
