@@ -26,6 +26,6 @@ O projeto está organizado em uma estrutura de pastas que inclui:
 
 ## Arquitetura
 
-<img src="docs/message-oriented-middleware architecture.png" alt="architecture image">
+<img src="docs/message-oriented-middleware-architecture.png" alt="architecture image">
 
 
